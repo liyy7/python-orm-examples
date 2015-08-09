@@ -13,7 +13,7 @@ if __name__ == '__main__':
     Base = declarative_base()
     Base.metadata.reflect(engine)
 
-    Base.__repr__ = lambda self: '\n'.join(
+    Base.__str__ = lambda self: '\n'.join(
         '{}: {}'.format(c.name, self.__dict__[c.name]) for c in self.__table__.columns)
 
     class User(Base):
@@ -30,12 +30,15 @@ if __name__ == '__main__':
     logging.basicConfig()
     logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
-    s = session()
-    u = s.query(User).options(joinedload('user_profile')).first()
+    S = session()
+    user = S.query(User).options(joinedload('user_profile')).first()
 
-    print('user', u)
-    print('user_profile', u.user_profile)
-    print('user_profile', u.user_profile.user)
+    print '\nuser'
+    print user
+    print '\nuser.user_profile'
+    print user.user_profile
+    print '\nuser.user_profile.user'
+    print user.user_profile.user
 
     # interactive debug
     # import IPython; IPython.embed()
